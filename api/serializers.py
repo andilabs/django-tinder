@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import serializers
+from rest_framework.pagination import PaginationSerializer
 
 from django.contrib.gis.geos import fromstr
 
@@ -14,9 +15,18 @@ class FuckFinderUserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FuckFinderUser
+        # exclude = ('prefered_sex', 'sex', 'last_location')
 
     def to_representation(self, instance):
         ret = super(FuckFinderUserListSerializer, self).to_representation(instance)
         pnt = fromstr(ret['last_location'])
         ret['last_location'] = {'longitude': pnt.coords[0], 'latitude': pnt.coords[1]}
         return ret
+
+
+class PaginatedFuckFinderUserListSerializer(PaginationSerializer):
+
+    class Meta:
+        object_serializer_class = FuckFinderUserListSerializer
+
+

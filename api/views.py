@@ -2,15 +2,18 @@
 # -*- coding: utf-8 -*-
 
 from rest_framework import generics
+from rest_framework.decorators import api_view
 
 from django.shortcuts import get_object_or_404
 from django.db.models import F
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 from django.http import JsonResponse
+from rest_framework.response import Response
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from models import FuckFinderUser
-from serializers import FuckFinderUserListSerializer
+from serializers import FuckFinderUserListSerializer, PaginatedFuckFinderUserListSerializer
 
 
 class FuckFinderList(generics.ListCreateAPIView):
@@ -25,24 +28,23 @@ class FuckFinderDetail(generics.RetrieveUpdateDestroyAPIView):
     model = FuckFinderUser
     serializer_class = FuckFinderUserListSerializer
 
+# version GEO FIRST
+@api_view(['GET', ])
+def fetch_fuckfinder_proposals_for(request, nick_of_finder, current_latitude, current_longitiude):
 
-def hetero_desires(finder):
-    if finder.sex == 'F':
-        return 'M'
-    else:
-        return 'F'
-
-
-def fetch_fuckfinder_proposals_for(request, nick_of_x, current_latitude, current_longitiude, limit=10):
-
-    finder = get_object_or_404(FuckFinderUser, nickname=nick_of_x)
+    finder = get_object_or_404(FuckFinderUser, nickname=nick_of_finder)
     finder_location = Point(float(current_longitiude), float(current_latitude))
 
     # consider by performance benchmarks, either first sex_age queries OR geo
+    candidates = FuckFinderUser.objects.filter(
+        last_location__distance_lte=(
+            finder_location,
+            D(km=min(finder.prefered_radius, F('friendly_rate'))))
+        ).distance(finder_location).order_by('distance')
 
     if finder.prefered_sex == finder.sex:
         # deal with homosexual
-        candidates = FuckFinderUser.objects.filter(
+        candidates_inside_finder_radius_and_vice_versa = candidates.filter(
             prefered_sex=finder.sex,
             sex=finder.prefered_sex,
             age__range=(finder.prefered_age_min, finder.prefered_age_max),
@@ -51,22 +53,70 @@ def fetch_fuckfinder_proposals_for(request, nick_of_x, current_latitude, current
         ).exclude(nickname=finder.nickname)
     else:
         # deal with heterosexual:
-        candidates = FuckFinderUser.objects.filter(
-            sex=hetero_desires(finder),
+        candidates_inside_finder_radius_and_vice_versa = candidates.filter(
+            sex=finder.hetero_desires(),
             age__range=(finder.prefered_age_min, finder.prefered_age_max),
             prefered_age_min__lte=finder.age,
             prefered_age_max__gte=finder.age,
         ).exclude(sex=F('prefered_sex')).exclude(nickname=finder.nickname)
 
-    # do geo queries
-    candidates_inside_finder_radius_and_vice_versa = candidates.filter(
-        last_location__distance_lte=(
-            finder_location,
-            D(km=min(finder.prefered_radius, F('friendly_rate'))))
-        ).distance(finder_location).order_by('distance')[:limit]
+    paginator = Paginator(candidates_inside_finder_radius_and_vice_versa, 20)
 
-    serializer = FuckFinderUserListSerializer(
-        candidates_inside_finder_radius_and_vice_versa, many=True)
+    page = request.QUERY_PARAMS.get('page')
 
-    return JsonResponse(serializer.data, safe=False)
+    try:
+        result = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        result = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999),
+        # deliver last page of results.
+        result = paginator.page(paginator.num_pages)
+
+    serializer_context = {'request': request}
+    serializer = PaginatedFuckFinderUserListSerializer(
+        result, context=serializer_context)
+    return Response(serializer.data)
+    # return JsonResponse(serializer.data, safe=False)
+
+
+# version GEO LAST
+
+# def fetch_fuckfinder_proposals_for(request, nick_of_finder, current_latitude, current_longitiude):
+
+#     finder = get_object_or_404(FuckFinderUser, nickname=nick_of_finder)
+#     finder_location = Point(float(current_longitiude), float(current_latitude))
+
+#     # consider by performance benchmarks, either first sex_age queries OR geo
+
+#     if finder.prefered_sex == finder.sex:
+#         # deal with homosexual
+#         candidates = FuckFinderUser.objects.filter(
+#             prefered_sex=finder.sex,
+#             sex=finder.prefered_sex,
+#             age__range=(finder.prefered_age_min, finder.prefered_age_max),
+#             prefered_age_min__lte=finder.age,
+#             prefered_age_max__gte=finder.age,
+#         ).exclude(nickname=finder.nickname)
+#     else:
+#         # deal with heterosexual:
+#         candidates = FuckFinderUser.objects.filter(
+#             sex=finder.hetero_desires(),
+#             age__range=(finder.prefered_age_min, finder.prefered_age_max),
+#             prefered_age_min__lte=finder.age,
+#             prefered_age_max__gte=finder.age,
+#         ).exclude(sex=F('prefered_sex')).exclude(nickname=finder.nickname)
+
+#     # do geo queries
+#     candidates_inside_finder_radius_and_vice_versa = candidates.filter(
+#         last_location__distance_lte=(
+#             finder_location,
+#             D(km=min(finder.prefered_radius, F('friendly_rate'))))
+#         ).distance(finder_location).order_by('distance')
+
+#     serializer = FuckFinderUserListSerializer(
+#         candidates_inside_finder_radius_and_vice_versa, many=True)
+
+#     return JsonResponse(serializer.data, safe=False)
 

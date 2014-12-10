@@ -11,10 +11,17 @@ SEX_CHOICES = (
 )
 
 
+def hetero_desires(sex):
+    if sex == 'F':
+        return 'M'
+    else:
+        return 'F'
+
+
 class FuckFinderUser(models.Model):
     nickname = models.CharField(max_length=250, unique=True)
-    age = models.IntegerField(validators=[MinValueValidator(18), MaxValueValidator(130)])
-    sex = models.CharField(max_length=1, choices=SEX_CHOICES)
+    age = models.IntegerField(validators=[MinValueValidator(18), MaxValueValidator(130)], db_index=True)
+    sex = models.CharField(max_length=1, choices=SEX_CHOICES, db_index=True)
     prefered_sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     prefered_age_min = models.IntegerField(validators=[MinValueValidator(18), MaxValueValidator(130)])
     prefered_age_max = models.IntegerField(validators=[MinValueValidator(18), MaxValueValidator(130)])
@@ -24,3 +31,6 @@ class FuckFinderUser(models.Model):
 
     def __str__(self):
         return self.nickname
+
+    def hetero_desires(self):
+        return hetero_desires(self.sex)
