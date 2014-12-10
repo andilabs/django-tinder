@@ -1,15 +1,16 @@
-from rest_framework.renderers import JSONRenderer
-from rest_framework import generics
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
+from rest_framework import generics
 
 from django.shortcuts import get_object_or_404
 from django.db.models import F
 from django.contrib.gis.measure import D
-from django.contrib.gis.geos import (Point, fromstr, fromfile, GEOSGeometry, MultiPolygon, Polygon)
+from django.contrib.gis.geos import Point
 from django.http import JsonResponse
 
 from models import FuckFinderUser
-from .serializers import FuckFinderUserListSerializer
+from serializers import FuckFinderUserListSerializer
 
 
 class FuckFinderList(generics.ListCreateAPIView):

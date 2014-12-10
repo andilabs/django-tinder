@@ -1,14 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from rest_framework import serializers
 
 from django.contrib.gis.geos import fromstr
 
-from models import FuckFinderUser
-
-
-SEX_CHOICES = (
-    ('F', 'Female',),
-    ('M', 'Male',),
-)
+from models import FuckFinderUser, SEX_CHOICES
 
 
 class FuckFinderUserListSerializer(serializers.ModelSerializer):
