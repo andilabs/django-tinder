@@ -3,14 +3,7 @@ from django.contrib.gis.geos import Point
 import random
 import uuid
 import numpy as np
-from api.models import FuckFinderUser
-
-
-def hetero_desires(sex):
-    if sex == 'F':
-        return 'M'
-    else:
-        return 'F'
+from api.models import FuckFinderUser, hetero_desires
 
 
 class Command(BaseCommand):
@@ -31,6 +24,7 @@ class Command(BaseCommand):
             user_sex = random.choice(['F', 'M'])
             sexual_orientation = ['hetero', 'homo']
             choosen_at_random_sexual_orientation = np.random.choice(sexual_orientation, p=[0.95, 0.05])
+
             if choosen_at_random_sexual_orientation == 'homo':
                 user_prefered_sex = user_sex
             else:

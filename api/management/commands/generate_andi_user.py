@@ -16,5 +16,5 @@ class Command(BaseCommand):
             prefered_age_min=21,
             prefered_age_max=29,
             last_location=Point(float(52.228625), float(21.001952)),
-            prefered_radius=5
+            prefered_radius=25
         )

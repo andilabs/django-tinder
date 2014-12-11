@@ -15,7 +15,6 @@ class FuckFinderUserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FuckFinderUser
-        # exclude = ('prefered_sex', 'sex', 'last_location')
 
     def to_representation(self, instance):
         ret = super(FuckFinderUserListSerializer, self).to_representation(instance)

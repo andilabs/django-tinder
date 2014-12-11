@@ -12,10 +12,7 @@ SEX_CHOICES = (
 
 
 def hetero_desires(sex):
-    if sex == 'F':
-        return 'M'
-    else:
-        return 'F'
+    return 'M' if sex == 'F' else 'F'
 
 
 class FuckFinderUser(models.Model):
