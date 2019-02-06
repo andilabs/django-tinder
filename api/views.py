@@ -1,42 +1,38 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 from rest_framework import generics
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
 from django.db.models import F
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
-from django.http import JsonResponse
-from rest_framework.response import Response
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from models import FuckFinderUser
-from serializers import FuckFinderUserListSerializer, PaginatedFuckFinderUserListSerializer
+from api.models import DjTinderUser
+from api.serializers import DjTinderUserListSerializer
 
 
-class FuckFinderList(generics.ListCreateAPIView):
-    serializer_class = FuckFinderUserListSerializer
+class DjTinderList(generics.ListCreateAPIView):
+    serializer_class = DjTinderUserListSerializer
 
     def get_queryset(self):
-        queryset = FuckFinderUser.objects.all()
+        queryset = DjTinderUser.objects.all()
         return queryset
 
 
-class FuckFinderDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = FuckFinderUser
-    serializer_class = FuckFinderUserListSerializer
+class DjTinderDetail(generics.RetrieveUpdateDestroyAPIView):
+    model = DjTinderUser
+    serializer_class = DjTinderUserListSerializer
 
 
 # version GEO FIRST with pagination
 @api_view(['GET', ])
-def fetch_fuckfinder_proposals_for(request, nick_of_finder, current_latitude, current_longitiude):
+def fetch_djtinder_proposals_for(request, nick_of_finder, current_latitude, current_longitiude):
 
-    finder = get_object_or_404(FuckFinderUser, nickname=nick_of_finder)
+    finder = get_object_or_404(DjTinderUser, nickname=nick_of_finder)
     finder_location = Point(float(current_longitiude), float(current_latitude))
 
-    candidates = FuckFinderUser.objects.filter(
+    candidates = DjTinderUser.objects.filter(
         last_location__distance_lte=(
             finder_location,
             D(km=min(finder.prefered_radius, F('prefered_radius'))))
@@ -72,6 +68,6 @@ def fetch_fuckfinder_proposals_for(request, nick_of_finder, current_latitude, cu
         result = paginator.page(paginator.num_pages)
 
     serializer_context = {'request': request}
-    serializer = PaginatedFuckFinderUserListSerializer(
+    serializer = DjTinderUserListSerializer(
         result, context=serializer_context)
     return Response(serializer.data)

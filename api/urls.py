@@ -1,12 +1,18 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-from rest_framework.urlpatterns import format_suffix_patterns
-from django.conf.urls import patterns, url
-from . import views
-
-urlpatterns = patterns('',
-    url(r'^fuckfindeusers/$', views.FuckFinderList.as_view(), name="fuckfinderuser-list"),
-    url(r'^fuckfindeusers/(?P<pk>\d+)/$', views.FuckFinderDetail.as_view(), name="fuckfinderuser-detail"),
-    url(r'fetch_fuckfinder_proposals_for/(?P<nick_of_finder>[^/]+)/(?P<current_latitude>-?\d{2,3}.\d{5})/(?P<current_longitiude>-?\d{2,3}.\d{5})/$', views.fetch_fuckfinder_proposals_for, name='fuckfinder_proposals'),
+from django.urls import path
+from api.views import (
+    DjTinderDetail,
+    DjTinderList,
+    fetch_djtinder_proposals_for
 )
-urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'api'])
+
+urlpatterns = [
+    path('djtinderusers/',
+         DjTinderList.as_view(), name="djtinderuser-list"),
+    path('djtinderusers/<int:pk>',
+         DjTinderDetail.as_view(),
+         name="djtinderuser-detail"),
+    path('fetch_djtinder_proposals_for/<nick_of_finder>/<current_latitude>/<current_longitiude>/',
+        fetch_djtinder_proposals_for, name='djtinder_proposals'),
+
+]
+

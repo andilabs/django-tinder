@@ -3,7 +3,7 @@ from django.contrib.gis.geos import Point
 import random
 import uuid
 import numpy as np
-from api.models import FuckFinderUser, hetero_desires
+from api.models import DjTinderUser, hetero_desires
 
 
 class Command(BaseCommand):
@@ -15,7 +15,7 @@ class Command(BaseCommand):
         warsaw__lng__min = 20.87
         warsaw__lng__max = 21.17
 
-        for i in xrange(10**6):
+        for i in range(10**6):
             new_random_lat = random.uniform(warsaw__lat__min, warsaw__lat__max)
             new_random_lng = random.uniform(warsaw__lng__min, warsaw__lng__max)
             user_age = random.randrange(18, 55)
@@ -30,7 +30,7 @@ class Command(BaseCommand):
             else:
                 user_prefered_sex = hetero_desires(user_sex)
 
-            FuckFinderUser.objects.create(
+            DjTinderUser.objects.create(
                 nickname=str(uuid.uuid4()),
                 age=user_age,
                 sex=user_sex,

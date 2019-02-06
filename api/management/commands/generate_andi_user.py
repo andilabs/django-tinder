@@ -1,14 +1,14 @@
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
 
-from api.models import FuckFinderUser
+from api.models import DjTinderUser
 
 
 class Command(BaseCommand):
     help = 'generate andi user'
 
     def handle(self, *args, **options):
-        FuckFinderUser.objects.create(
+        DjTinderUser.objects.create(
             nickname='andi',
             age=26,
             sex='M',

@@ -1,0 +1,38 @@
+version: '3.6'
+
+
+x-environment: &environment
+  POSTGRES_DB: scrapper
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_HOST: db
+
+
+
+services:
+
+  db:
+    image: mdillon/postgis
+    container_name: db
+    environment:
+      <<: *environment
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+
+  web:
+    build: .
+    container_name: web
+    environment:
+      <<: *environment
+    command: bash -c "python /code/manage.py migrate --noinput && python /code/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

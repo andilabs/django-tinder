@@ -13,31 +13,31 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='fuckfinderuser',
+            model_name='djtinderuser',
             name='age',
             field=models.IntegerField(db_index=True, validators=[django.core.validators.MinValueValidator(18), django.core.validators.MaxValueValidator(130)]),
             preserve_default=True,
         ),
         migrations.AlterField(
-            model_name='fuckfinderuser',
+            model_name='djtinderuser',
             name='prefered_age_max',
             field=models.IntegerField(db_index=True, validators=[django.core.validators.MinValueValidator(18), django.core.validators.MaxValueValidator(130)]),
             preserve_default=True,
         ),
         migrations.AlterField(
-            model_name='fuckfinderuser',
+            model_name='djtinderuser',
             name='prefered_age_min',
             field=models.IntegerField(db_index=True, validators=[django.core.validators.MinValueValidator(18), django.core.validators.MaxValueValidator(130)]),
             preserve_default=True,
         ),
         migrations.AlterField(
-            model_name='fuckfinderuser',
+            model_name='djtinderuser',
             name='prefered_sex',
             field=models.CharField(db_index=True, max_length=1, choices=[(b'F', b'Female'), (b'M', b'Male')]),
             preserve_default=True,
         ),
         migrations.AlterField(
-            model_name='fuckfinderuser',
+            model_name='djtinderuser',
             name='sex',
             field=models.CharField(db_index=True, max_length=1, choices=[(b'F', b'Female'), (b'M', b'Male')]),
             preserve_default=True,
