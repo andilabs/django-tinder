@@ -1,14 +1,19 @@
-djtinder
-========
+djtinder ❤️
+===========
 
-DjangoTinder is app written for fun using Django with power of GeoDjango and PostgreSQL with PostGIS.
+DjangoTinder is app written for fun using Django 
+with power of GeoDjango and PostgreSQL with PostGIS extension.
 
-It aims to simulate what app like [Tinder](http://en.wikipedia.org/wiki/Tinder_%28application%29) does, that is: finding people meeting nearby, sex, age, orientation, criteria.
+It aims to simulate what backend of app like [Tinder](http://en.wikipedia.org/wiki/Tinder_%28application%29) 
+does, that is: finding people meeting nearby, sex, age, orientation, criteria.
 
+App provides just one endpoint for finding nearby people. 🌎
 
-### how to run it
+The docker-compose is provided for simple setup.
 
+### how to run it?
 
+Assuming you have docker 🐳 [installed](https://docs.docker.com/install/) on your machine  - just:
 
     docker-compose up -d
     
