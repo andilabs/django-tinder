@@ -9,12 +9,20 @@ from api.models import DjTinderUser, SEX_CHOICES
 
 
 class DjTinderUserListSerializer(serializers.ModelSerializer):
-    prefered_sex = serializers.ChoiceField(choices=SEX_CHOICES, default='male')
+    preferred_sex = serializers.ChoiceField(choices=SEX_CHOICES, default='male')
     sex = serializers.ChoiceField(choices=SEX_CHOICES, default='male')
+    distance = serializers.SerializerMethodField(read_only=True)
+    smaller_radius = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = DjTinderUser
         fields = "__all__"
+
+    def get_distance(self, obj):
+        if hasattr(obj, 'distance'):
+            return round(obj.distance.m, 1)
+        else:
+            return None
 
     def to_representation(self, instance):
         ret = super(DjTinderUserListSerializer, self).to_representation(instance)

@@ -12,9 +12,9 @@ class Command(BaseCommand):
             nickname='andi',
             age=26,
             sex='M',
-            prefered_sex='F',
-            prefered_age_min=21,
-            prefered_age_max=29,
+            preferred_sex='F',
+            preferred_age_min=21,
+            preferred_age_max=29,
             last_location=Point(float(52.228625), float(21.001952)),
-            prefered_radius=25
+            preferred_radius=25
         )

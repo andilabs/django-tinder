@@ -3,3 +3,4 @@ djangorestframework==3.9.0
 psycopg2-binary==2.7.5
 django-extensions==2.1.4
 numpy==1.16.1
+ipdb==0.11
