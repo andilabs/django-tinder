@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import FuckFinderUser
+from .models import DjTinderUser
 
-admin.site.register(FuckFinderUser)
+admin.site.register(DjTinderUser)
