@@ -10,19 +10,6 @@ from api.models import DjTinderUser
 from api.serializers import DjTinderUserListSerializer
 
 
-class DjTinderList(generics.ListCreateAPIView):
-    serializer_class = DjTinderUserListSerializer
-
-    def get_queryset(self):
-        queryset = DjTinderUser.objects.all()
-        return queryset
-
-
-class DjTinderDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = DjTinderUser
-    serializer_class = DjTinderUserListSerializer
-
-
 class ProposalsApiView(generics.ListAPIView):
 
     serializer_class = DjTinderUserListSerializer
