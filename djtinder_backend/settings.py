@@ -135,3 +135,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+
+MAP_WIDGETS = {
+    "GOOGLE_MAP_API_KEY": os.environ.get('GOOGLE_MAP_API_KEY')
+}

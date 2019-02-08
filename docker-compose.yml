@@ -6,7 +6,7 @@ x-environment: &environment
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_HOST: db
-
+  GOOGLE_MAP_API_KEY: ${GOOGLE_MAP_API_KEY}
 
 
 services:

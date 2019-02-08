@@ -43,3 +43,9 @@ GET call to the endpoint like this:
 http://127.0.0.1:8000/api/proposals/andi/52.230/21.002/
 
 The endpoint will return proposal for user `andi`.
+
+### maps widget in admin
+
+to have nice google maps in admin fill in `.env` file value:
+
+    GOOGLE_MAP_API_KEY=<here_your_google_maps_key_with_js_and_geocoding_rights)

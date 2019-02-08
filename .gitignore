@@ -1,2 +1,3 @@
-ff_venv/
 *.pyc
+# dotenv
+.env
