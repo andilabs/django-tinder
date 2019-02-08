@@ -1,4 +1,4 @@
-Django==2.1.4
+Django==2.1.5
 djangorestframework==3.9.0
 psycopg2-binary==2.7.5
 django-extensions==2.1.4
