@@ -48,4 +48,4 @@ The endpoint will return proposal for user `andi`.
 
 to have nice google maps in admin fill in `.env` file value:
 
-    GOOGLE_MAP_API_KEY=<here_your_google_maps_key_with_js_and_geocoding_rights)
+    GOOGLE_MAP_API_KEY=<here_your_google_maps_key_with_js_and_geocoding_rights>
