@@ -1,5 +1,5 @@
-djtinder ❤️
-===========
+django-tinder ❤️
+=============
 
 DjangoTinder is app written for fun using Django 
 with power of GeoDjango and PostgreSQL with PostGIS extension.

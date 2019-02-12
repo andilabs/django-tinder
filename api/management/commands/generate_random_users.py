@@ -29,10 +29,10 @@ class Command(BaseCommand):
             user_delta_minus = random.choice([1, 2, 3, 5, 8, 13])
             user_sex = random.choice(['F', 'M'])
             sexual_orientation = ['hetero', 'homo']
-            choosen_at_random_sexual_orientation = np.random.choice(
+            chosen_at_random_sexual_orientation = np.random.choice(
                 sexual_orientation, p=[0.95, 0.05])
 
-            if choosen_at_random_sexual_orientation == 'homo':
+            if chosen_at_random_sexual_orientation == 'homo':
                 user_preferred_sex = user_sex
             else:
                 user_preferred_sex = hetero_desires(user_sex)
