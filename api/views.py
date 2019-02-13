@@ -44,30 +44,15 @@ class ProposalsApiView(generics.ListAPIView):
             'distance'
         )
 
-        if finder.preferred_sex == finder.sex:
-            # deal with homosexual
-            queryset = queryset.filter(
-                preferred_sex=finder.sex,
-                sex=finder.preferred_sex,
-                age__range=(
-                    finder.preferred_age_min,
-                    finder.preferred_age_max),
-                preferred_age_min__lte=finder.age,
-                preferred_age_max__gte=finder.age,
-            ).exclude(
-                nickname=finder.nickname
-            )
-        else:
-            # deal with heterosexual:
-            queryset = queryset.filter(
-                sex=finder.hetero_desires(),
-                age__range=(
-                    finder.preferred_age_min,
-                    finder.preferred_age_max),
-                preferred_age_min__lte=finder.age,
-                preferred_age_max__gte=finder.age,
-            ).exclude(
-                sex=F('preferred_sex'),
-                nickname=finder.nickname
-            )
+        queryset = queryset.filter(
+            sex=finder.sex if finder.homo else finder.get_opposed_sex,
+            preferred_sex=finder.sex,
+            age__range=(
+                finder.preferred_age_min,
+                finder.preferred_age_max),
+            preferred_age_min__lte=finder.age,
+            preferred_age_max__gte=finder.age,
+        ).exclude(
+            nickname=finder.nickname
+        )
         return queryset

@@ -1,9 +1,11 @@
-from django.core.management.base import BaseCommand
-from django.contrib.gis.geos import Point
+import numpy as np
 import random
 import uuid
-import numpy as np
-from api.models import DjTinderUser, hetero_desires
+
+from django.core.management.base import BaseCommand
+from django.contrib.gis.geos import Point
+
+from api.models import DjTinderUser, get_opposed_sex
 
 
 class Command(BaseCommand):
@@ -35,7 +37,7 @@ class Command(BaseCommand):
             if chosen_at_random_sexual_orientation == 'homo':
                 user_preferred_sex = user_sex
             else:
-                user_preferred_sex = hetero_desires(user_sex)
+                user_preferred_sex = get_opposed_sex(user_sex)
 
             DjTinderUser.objects.create(
                 nickname=str(uuid.uuid4()),

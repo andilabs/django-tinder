@@ -11,7 +11,7 @@ SEX_CHOICES = (
 )
 
 
-def hetero_desires(sex):
+def get_opposed_sex(sex):
     return 'M' if sex == 'F' else 'F'
 
 
@@ -30,8 +30,13 @@ class DjTinderUser(models.Model):
     preferred_radius = models.IntegerField(default=5,
                                            help_text="in kilometers")
 
+    @property
+    def homo(self):
+        return self.preferred_sex == self.sex
+
     def __str__(self):
         return self.nickname
 
-    def hetero_desires(self):
-        return hetero_desires(self.sex)
+    @property
+    def get_opposed_sex(self):
+        return get_opposed_sex(self.sex)
