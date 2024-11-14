@@ -1,4 +1,4 @@
-version: '3.6'
+version: '3.12'
 
 
 x-environment: &environment
@@ -8,18 +8,7 @@ x-environment: &environment
   POSTGRES_HOST: db
   GOOGLE_MAP_API_KEY: ${GOOGLE_MAP_API_KEY}
 
-
 services:
-
-  db:
-    image: mdillon/postgis
-    container_name: db
-    environment:
-      <<: *environment
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    ports:
-      - 5432:5432
 
   web:
     build: .
@@ -32,7 +21,28 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - db
+       db:
+        condition: service_healthy
+        restart: true
+
+  db:
+    platform: linux/amd64
+    image: postgis/postgis
+    container_name: db
+    environment:
+      <<: *environment
+    volumes:
+      - ./docker/db/custom_postgresql.conf:/etc/postgresql.conf
+      - ./docker/db/custom_pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+        interval: 10s
+        retries: 5
+        start_period: 30s
+        timeout: 10s
 
 volumes:
   postgres_data:
