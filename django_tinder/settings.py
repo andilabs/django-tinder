@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -132,6 +135,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -139,6 +144,33 @@ REST_FRAMEWORK = {
 }
 
 
+GOOGLE_MAP_API_KEY = os.environ.get('GOOGLE_MAP_API_KEY')
+
 MAP_WIDGETS = {
-    "GOOGLE_MAP_API_KEY": os.environ.get('GOOGLE_MAP_API_KEY')
+    "GoogleMap": {
+        "apiKey": GOOGLE_MAP_API_KEY,
+        "PointField": {
+            "interactive": {
+                "mapOptions": {
+                    "zoom": 15,  # set initial zoom
+                    "streetViewControl": False,
+                },
+                "GooglePlaceAutocompleteOptions": {
+                    "componentRestrictions": {"country": "pl"}
+                },
+            }
+        }
+    },
+
+    "Leaflet": {
+        "PointField": {
+            "interactive": {
+                "mapOptions": {
+                    "zoom": 12,
+                    "scrollWheelZoom": False
+                }
+            }
+        },
+        "markerFitZoom": 14,
+    }
 }
